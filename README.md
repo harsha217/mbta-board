@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This git repo serves code, that would help users see MBTA schedule realtime. We make use of MBTA API's to fetch realtime metrics.
+https://api-v3.mbta.com/docs/swagger/index.html
+
+Look at below scripts to understand how to get this running on your local.
 
 ## Available Scripts
 
@@ -11,6 +14,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
+
+### `yarn start-api`
+
+Runs the flask app, python backend will be able to respond to REST calls.
 
 ### `yarn test`
 
