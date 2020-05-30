@@ -1,0 +1,2 @@
+FLASK_APP=mbta_api.py
+FLASK_ENV=development
