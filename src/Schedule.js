@@ -23,27 +23,8 @@ const Schedule = ({currentStation}) => {
         console.log('No Schedule/ Predictions for Current Station.'); 
         return;
       }  
-      const predictions = response['data'];
-      const additionalInfo = response['included'];
-      const predictedSchedule = predictions.map(predictionData => {
-        const filteredSchedule = additionalInfo.filter(data => data['id'] === predictionData['relationships']['schedule']['data']['id']); 
-        if (!!predictionData['attributes']) { 
-          predictionData['attributes']['departure_time'] = filteredSchedule[0]['attributes']['departure_time'] ? new Date(filteredSchedule[0]['attributes']['departure_time']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}): 'Last Stop';
-          predictionData['attributes']['arrival_time'] = filteredSchedule[0]['attributes']['arrival_time'] ? new Date(filteredSchedule[0]['attributes']['arrival_time']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}): 'First Stop';  
-        }
-        const filteredRoute = additionalInfo.filter(data => data['id'] === predictionData['relationships']['route']['data']['id']);  
-        const direction_id = filteredSchedule[0]['attributes']['direction_id'];
-        predictionData['attributes']['destination'] = filteredRoute[0]['attributes']['direction_destinations'][direction_id];
-        predictionData['attributes']['line'] = filteredRoute[0]['attributes']['long_name'];
-        if (!!filteredSchedule[0]['attributes']['arrival_time']) {
-          predictionData['attributes']['isOnTime'] = new Date() < new Date(filteredSchedule[0]['attributes']['arrival_time']) 
-        } else if (!!filteredSchedule[0]['attributes']['departure_time']) {
-          predictionData['attributes']['isOnTime'] = new Date() < new Date(filteredSchedule[0]['attributes']['departure_time']) 
-        }
-        predictionData['attributes']['color'] = filteredRoute[0]['attributes']['text_color'];
-        return predictionData;
-      });
-        setStationSchedule(predictedSchedule);
+      const formattedPredictionScheduleResponse = formatPredictionResponse(response);
+      setStationSchedule(formattedPredictionScheduleResponse);
     })
     .catch(error => {
       // Can log this error to kibana for monitoring purposes. 
@@ -51,6 +32,30 @@ const Schedule = ({currentStation}) => {
       setErrorMessage('Unable to load schedule for this station. Please try again later.');
     });
   }, [currentStation]);
+
+  const formatPredictionResponse = (response) => {
+    const predictions = response['data'];
+    const additionalInfo = response['included'];
+    const predictedSchedule = predictions.map(predictionData => {
+      const filteredSchedule = additionalInfo.filter(data => data['id'] === predictionData['relationships']['schedule']['data']['id']); 
+      if (!!predictionData['attributes']) { 
+        predictionData['attributes']['departure_time'] = filteredSchedule[0]['attributes']['departure_time'] ? new Date(filteredSchedule[0]['attributes']['departure_time']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}): 'Last Stop';
+        predictionData['attributes']['arrival_time'] = filteredSchedule[0]['attributes']['arrival_time'] ? new Date(filteredSchedule[0]['attributes']['arrival_time']).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}): 'First Stop';  
+      }
+      const filteredRoute = additionalInfo.filter(data => data['id'] === predictionData['relationships']['route']['data']['id']);  
+      const direction_id = filteredSchedule[0]['attributes']['direction_id'];
+      predictionData['attributes']['destination'] = filteredRoute[0]['attributes']['direction_destinations'][direction_id];
+      predictionData['attributes']['line'] = filteredRoute[0]['attributes']['long_name'];
+      if (!!filteredSchedule[0]['attributes']['arrival_time']) {
+        predictionData['attributes']['isOnTime'] = new Date() < new Date(filteredSchedule[0]['attributes']['arrival_time']) 
+      } else if (!!filteredSchedule[0]['attributes']['departure_time']) {
+        predictionData['attributes']['isOnTime'] = new Date() < new Date(filteredSchedule[0]['attributes']['departure_time']) 
+      }
+      predictionData['attributes']['color'] = filteredRoute[0]['attributes']['text_color'];
+      return predictionData;
+    });
+    return predictedSchedule;
+  }
 
   return (
     <Table celled selectable>
