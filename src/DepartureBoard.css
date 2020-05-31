@@ -1,4 +1,4 @@
-.MbtaDepartureBoard {
+.DepartureBoard {
   text-align: center;
 }
 
@@ -6,8 +6,8 @@
   padding-top: 25px;
 }
 
-.departureBoard {
-  padding-bottom: 35px
+.board {
+  padding-bottom: 35px;
 }
 
 .divider,

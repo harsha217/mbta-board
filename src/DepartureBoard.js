@@ -1,27 +1,37 @@
 import React, {useEffect, useState} from 'react';
-import {Dropdown, Container, Menu, Header, Card, Divider} from 'semantic-ui-react'
+import {Dropdown, Container, Menu, Header, Card, Divider} from 'semantic-ui-react';
 import Clock from 'react-live-clock';
-import Schedule from './Schedule.js';
-import './MbtaDepartureBoard.css';
+import Schedule from './Schedule';
+import './DepartureBoard.css';
 
 const COMMUTER_RAIL_ROUTE_TYPE_ID = 2;
 const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const TEXT_HOME = 'Home';
 const TEXT_SCHEDULE = 'SCHEDULE';
-const TEXT_SELECT_STATION = 'Select Station';
+const TEXT_CHOOSE_STATION = 'Choose Station';
+const TEXT_STATION_NAME = 'Station Name';
 
-const MbtaDepartureBoard = () => {
-  const [allStations, setStations] = useState(0);
+const DepartureBoard = () => {
+  const [allStations, setStations] = useState([]);
   const [currentStation, setCurrentStation] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const today = new Date();
   useEffect(() => {
-    fetch(`/api/v1/getStops/${COMMUTER_RAIL_ROUTE_TYPE_ID}`).then(response => response.json()).then(stations => {
+    // Fetch all Stops specific to Commuter Routes.
+    fetch(`/api/v1/get_stops/${COMMUTER_RAIL_ROUTE_TYPE_ID}`)
+    .then(response => response.json())
+    .then(stations => {
       stations.map ((station) => {
         station['key'] = station['id'];
         station['text'] = station['attributes']['name'];
         station['value'] = station['attributes']['name'];
       });
       setStations(stations);
+    })
+    .catch(error => {
+      // Can log this error to kibana for monitoring purposes. 
+      console.log(error);
+      setErrorMessage('Unable to load station list. Please try again later.');
     });
   }, []);
 
@@ -30,7 +40,7 @@ const MbtaDepartureBoard = () => {
   }
 
   return (
-    <div className="departureBoard">
+    <div className="board">
      <Menu>
         <Menu.Item
           name={TEXT_HOME}
@@ -50,8 +60,9 @@ const MbtaDepartureBoard = () => {
         {TEXT_SCHEDULE}
       </Divider>  
       <div className="schedule">
-        <Header size='small'>Choose Station:</Header> 
-        <Dropdown placeholder={TEXT_SELECT_STATION} selection search options={allStations} onChange={onStationSelection}/>
+        <Header size='small'>{TEXT_CHOOSE_STATION}:</Header> 
+        {errorMessage}
+        <Dropdown placeholder={TEXT_STATION_NAME} selection search options={allStations} onChange={onStationSelection}/>
         {currentStation && (
           <Schedule currentStation={currentStation}/>
         )}
@@ -61,4 +72,4 @@ const MbtaDepartureBoard = () => {
   );
 }
 
-export default MbtaDepartureBoard;
+export default DepartureBoard;

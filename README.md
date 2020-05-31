@@ -1,7 +1,32 @@
-This git repo serves code, that would help users see MBTA schedule realtime. We make use of MBTA API's to fetch realtime metrics.
+This git repo serves code, that would help users see MBTA schedule realtime. 
+It uses MBTA API's to fetch realtime train metrics.
 https://api-v3.mbta.com/docs/swagger/index.html
 
+Front-end is in React and Backend is a Python Flask app that makes API calls to fetch data.
+
+Reach out to me at harshavardhan217@gmail.com if you have any questions/ suggestions.
 Look at below scripts to understand how to get this running on your local.
+
+#### Homepage
+
+
+<img src="Homepage.png" height="200" width="450">
+
+
+
+#### Display Arrivals and Departures at Current Station
+
+
+<img src="DisplayArrivalsDepartures.png" height="200" width="450">
+
+
+
+#### No Arrivals or Departures Today at the Station
+
+
+<img src="NoArrivalsDepartures.png" height="200" width="450">
+
+
 
 ## Available Scripts
 
@@ -18,6 +43,7 @@ You will also see any lint errors in the console.
 ### `yarn start-api`
 
 Runs the flask app, python backend will be able to respond to REST calls.
+You neeed to run both `yarn start` and `yarn start-api` to ensure that both frontend and backend work off each other.
 
 ### `yarn test`
 
@@ -34,42 +60,6 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
